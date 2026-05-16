@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using PRN232.LMS.Repositories.Data;
 using PRN232.LMS.Repositories.IRepositories;
 using PRN232.LMS.Repositories.Repositories;
+using PRN232.LMS.Services.IServices;
+using PRN232.LMS.Services.Services;
 
 
 
@@ -18,9 +20,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IStudentRepositories, StudentRepositoies>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped(
+    typeof(IGenericRepositories<>),
+    typeof(GenericRepositories<>)
+);
 
 
-//builder.Services.AddScoped<IStudentService, StudentService>();
 
 var app = builder.Build();
 

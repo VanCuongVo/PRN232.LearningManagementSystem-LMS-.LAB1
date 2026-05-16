@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace PRN232.LMS.Services.Validators
 {
     public class StudentValidator
-    {
+    {  
 
     }
 }
