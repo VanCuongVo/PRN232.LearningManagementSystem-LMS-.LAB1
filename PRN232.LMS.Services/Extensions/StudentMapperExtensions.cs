@@ -18,8 +18,7 @@ namespace PRN232.LMS.Services.Extensions
 
                 Email = student.Email,
 
-                DateOfBirth =
-                    student.Dateofbirth
+                DateOfBirth = student.Dateofbirth
 
             };
         }

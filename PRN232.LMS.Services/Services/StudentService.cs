@@ -17,6 +17,50 @@ namespace PRN232.LMS.Services.Services
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<ApiResponse<StudentResponse>> CreateAsync(CreateStudentRequest request)
+        {
+            var createStudentRequest = new Models.Entities.Student
+            {
+                Dateofbirth = DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Unspecified),
+                Email = request.Email,
+                Fullname = request.FullName
+
+            };
+            var res = await _unitOfWork.Students.AddAsync(createStudentRequest);
+            await _unitOfWork.SaveChangesAsync();
+
+            return new ApiResponse<
+     StudentResponse>
+            {
+                success = true,
+
+                message = "Create student successfully",
+
+                Data = StudentMapperExtensions.ToStudentResponse(res)
+            };
+        }
+
+        public async Task<ApiResponse<bool>> DeleteAsync(int id)
+        {
+            var student = await _unitOfWork.Students.GetByIdAsync(id);
+            if (student != null)
+            {
+                await _unitOfWork.Students.DeleteAsync(student.Studentid);
+                await _unitOfWork.SaveChangesAsync();
+                return new ApiResponse<bool>
+                {
+                    success = true,
+                    message = "Delete student successfully"
+                };
+
+            }
+            return new ApiResponse<bool>
+            {
+                success = false,
+                message = "Delete student Fails"
+            };
+        }
+
         public async Task<ApiResponse<List<StudentResponse>>> GetAllAsync(StudentQueryParameters query)
         {
             var studentsQuery = _unitOfWork
@@ -55,6 +99,53 @@ namespace PRN232.LMS.Services.Services
                                 (double)totalItems
                                 / query.Size)
                 }
+            };
+        }
+
+        public async Task<StudentResponse> GetByIdAsync(int id)
+        {
+            var student = await _unitOfWork.Students.GetByIdAsync(id);
+            if (student == null)
+            {
+                return null;
+            }
+            var toStudentResponse = StudentMapperExtensions.ToStudentResponse(student);
+            return toStudentResponse;
+        }
+
+        public async Task<ApiResponse<StudentResponse>> UpdateAsync(int id, UpdateStudentRequest request)
+        {
+            var student =
+                  await _unitOfWork
+                      .Students
+                      .GetByIdAsync(id);
+            if (student == null)
+            {
+                return new ApiResponse<StudentResponse>
+                {
+                    success = false,
+
+                    message =
+                "Student not found"
+                };
+            }
+            student.Email = request.Email;
+            student.Dateofbirth = DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Unspecified);
+            student.Fullname = request.FullName;
+
+            await _unitOfWork.Students.UpdateAsync(student);
+            await _unitOfWork.SaveChangesAsync();
+
+            return new ApiResponse<
+        StudentResponse>
+            {
+                success = true,
+
+                message =
+            "Update student successfully",
+
+                Data =
+            student.ToStudentResponse()
             };
         }
     }
