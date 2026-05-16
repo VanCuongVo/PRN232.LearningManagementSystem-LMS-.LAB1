@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PRN232.LMS.Models.Entities;
 using PRN232.LMS.Models.RequestModel;
 using PRN232.LMS.Models.ResponseModel;
 using PRN232.LMS.Repositories.IRepositories;
+using PRN232.LMS.Services.Extensions;
 using PRN232.LMS.Services.IServices;
+using PRN232.LMS.Services.Utility;
 
 namespace PRN232.LMS.Services.Services
 {
@@ -23,53 +24,21 @@ namespace PRN232.LMS.Services.Services
                             .GetQueryable();
 
             // Search 
-            if (!string.IsNullOrEmpty(query.Search))
-            {
-                studentsQuery = studentsQuery.Where(x => x.Fullname.ToLower().Contains(query.Search.ToLower()));
-            }
-
+            studentsQuery = StudentQueryExtensions.Search(studentsQuery, query);
             // Sort
-            switch (query.Sort)
-            {
-                case "fullName":
-                    studentsQuery = studentsQuery.OrderBy(x => x.Fullname);
-                    break;
-
-                case "_fullName":
-                    studentsQuery = studentsQuery.OrderByDescending(x => x.Fullname);
-                    break;
-
-                case "dateOfBirth":
-                    studentsQuery = studentsQuery.OrderBy(x => x.Dateofbirth);
-                    break;
-
-                case "_dateOfBirth":
-                    studentsQuery = studentsQuery.OrderByDescending(x => x.Dateofbirth);
-                    break;
-
-                default:
-                    studentsQuery = studentsQuery
-                        .OrderBy(x => x.Studentid);
-                    break;
-            }
+            studentsQuery = StudentQueryExtensions.Sort(studentsQuery,
+            query);
             // TOTAL ITEMS
             var totalItems =
                 await studentsQuery.CountAsync();
 
             // Pading
-            studentsQuery = studentsQuery
-    .Skip((query.Page - 1) * query.Size)
-    .Take(query.Size);
+            studentsQuery = StudentQueryExtensions.Paging(studentsQuery, query);
+
             var students =
                await studentsQuery.ToListAsync();
 
-            var response = students.Select(x => new StudentResponse
-            {
-                StudentId = x.Studentid,
-                FullName = x.Fullname,
-                Email = x.Email,
-                DateOfBirth = x.Dateofbirth
-            }).ToList();
+            var response = StudentMapperExtensions.ToStudentResponseList(students);
 
             return new ApiResponse<List<StudentResponse>>
             {
@@ -86,7 +55,7 @@ namespace PRN232.LMS.Services.Services
                                 (double)totalItems
                                 / query.Size)
                 }
-            };     
+            };
         }
     }
 }
