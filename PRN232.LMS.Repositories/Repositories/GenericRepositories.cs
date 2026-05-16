@@ -1,0 +1,63 @@
+﻿using Microsoft.EntityFrameworkCore;
+using PRN232.LMS.Repositories.Data;
+using PRN232.LMS.Repositories.IRepositories;
+
+namespace PRN232.LMS.Repositories.Repositories
+{
+    public class GenericRepositories<T> : IGenericRepositories<T> where T : class
+    {
+        public readonly LmsdbContext _lmsdbContext;
+
+        public GenericRepositories(LmsdbContext lmsdbContext)
+        {
+            _lmsdbContext = lmsdbContext;
+        }
+
+        public async Task<T> AddAsync(T entity)
+        {
+            try
+            {
+               await _lmsdbContext.Set<T>().AddAsync(entity);
+                return entity;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var existingEntity = await GetByIdAsync(id);
+            if (existingEntity != null)
+            {
+                _lmsdbContext.Remove(existingEntity);
+            }
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await _lmsdbContext.Set<T>().ToListAsync();
+        }
+
+        public async Task<T> GetByIdAsync(object id)
+        {
+            return await _lmsdbContext.Set<T>().FindAsync(id);
+        }
+
+        public async Task<T> UpdateAsync(T entity)
+        {
+            try
+            {
+               _lmsdbContext.Set<T>().Update(entity);
+                return entity;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+    }
+}
