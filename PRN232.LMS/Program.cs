@@ -31,14 +31,18 @@ builder.Services.AddScoped(
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    var db = scope.ServiceProvider.GetRequiredService<LmsdbContext>();
 
-app.UseHttpsRedirection();
+    db.Database.Migrate();
+}
+// Configure the HTTP request pipeline.
+
+app.UseSwagger();
+app.UseSwaggerUI();
+// app.UseHttpsRedirection();
+
 
 app.UseAuthorization();
 

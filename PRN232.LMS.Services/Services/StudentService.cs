@@ -21,7 +21,7 @@ namespace PRN232.LMS.Services.Services
         {
             var createStudentRequest = new Models.Entities.Student
             {
-                Dateofbirth = DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Unspecified),
+                Dateofbirth = DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Utc),
                 Email = request.Email,
                 Fullname = request.FullName
 
@@ -63,24 +63,21 @@ namespace PRN232.LMS.Services.Services
 
         public async Task<ApiResponse<List<StudentResponse>>> GetAllAsync(StudentQueryParameters query)
         {
-            var studentsQuery = _unitOfWork
-                            .Students
-                            .GetQueryable();
+            var studentsQuery = _unitOfWork.Students.GetQueryable();
 
             // Search 
             studentsQuery = StudentQueryExtensions.Search(studentsQuery, query);
             // Sort
             studentsQuery = StudentQueryExtensions.Sort(studentsQuery,
             query);
+
             // TOTAL ITEMS
-            var totalItems =
-                await studentsQuery.CountAsync();
+            var totalItems = await studentsQuery.CountAsync();
 
             // Pading
             studentsQuery = StudentQueryExtensions.Paging(studentsQuery, query);
 
-            var students =
-               await studentsQuery.ToListAsync();
+            var students = await studentsQuery.ToListAsync();
 
             var response = StudentMapperExtensions.ToStudentResponseList(students);
 
@@ -130,7 +127,7 @@ namespace PRN232.LMS.Services.Services
                 };
             }
             student.Email = request.Email;
-            student.Dateofbirth = DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Unspecified);
+            student.Dateofbirth = DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Utc);
             student.Fullname = request.FullName;
 
             await _unitOfWork.Students.UpdateAsync(student);
@@ -150,3 +147,4 @@ namespace PRN232.LMS.Services.Services
         }
     }
 }
+
