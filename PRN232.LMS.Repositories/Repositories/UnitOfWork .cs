@@ -7,14 +7,20 @@ namespace PRN232.LMS.Repositories.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly LmsdbContext _context;
+        public IStudentRepositories Students { get; }
 
-        public IGenericRepositories<Student> Students { get; }
+        public ISubjectRepositories Subjects { get; }
 
-        public UnitOfWork(LmsdbContext context, IGenericRepositories<Student> students)
+        public UnitOfWork(
+            LmsdbContext context,
+            IStudentRepositories students,
+            ISubjectRepositories subjects)
         {
             _context = context;
-            Students =
-                 students;
+
+            Students = students;
+
+            Subjects = subjects;
         }
 
         public async Task<int> SaveChangesAsync()

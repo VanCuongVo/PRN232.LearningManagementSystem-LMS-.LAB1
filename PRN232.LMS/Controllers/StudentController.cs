@@ -17,7 +17,7 @@ namespace PRN232.LMS.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] StudentQueryParameters query)
+        public async Task<IActionResult> GetAll([FromQuery] QueryParameters query)
         {
             var result = await _studentService.GetAllAsync(query);
             return Ok(result);

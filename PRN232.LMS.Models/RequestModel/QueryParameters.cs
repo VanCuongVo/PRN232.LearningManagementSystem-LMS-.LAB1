@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PRN232.LMS.Models.RequestModel
 {
-    public class StudentQueryParameters
+    public class QueryParameters
     {
         public string? Search { get; set; }
 

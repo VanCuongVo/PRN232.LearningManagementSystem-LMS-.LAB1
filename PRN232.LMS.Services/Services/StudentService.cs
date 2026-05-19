@@ -61,15 +61,14 @@ namespace PRN232.LMS.Services.Services
             };
         }
 
-        public async Task<ApiResponse<List<StudentResponse>>> GetAllAsync(StudentQueryParameters query)
+        public async Task<ApiResponse<List<StudentResponse>>> GetAllAsync(QueryParameters query)
         {
             var studentsQuery = _unitOfWork.Students.GetQueryable();
 
             // Search 
             studentsQuery = StudentQueryExtensions.Search(studentsQuery, query);
             // Sort
-            studentsQuery = StudentQueryExtensions.Sort(studentsQuery,
-            query);
+            studentsQuery = StudentQueryExtensions.Sort(studentsQuery, query);
 
             // TOTAL ITEMS
             var totalItems = await studentsQuery.CountAsync();

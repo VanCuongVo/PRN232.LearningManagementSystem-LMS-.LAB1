@@ -5,7 +5,7 @@ namespace PRN232.LMS.Services.Utility
 {
     public static class StudentQueryExtensions
     {
-        public static IQueryable<Student> Search(this IQueryable<Student> query, StudentQueryParameters request)
+        public static IQueryable<Student> Search(this IQueryable<Student> query, QueryParameters request)
         {
             if (string.IsNullOrEmpty(request.Search))
             {
@@ -17,7 +17,7 @@ namespace PRN232.LMS.Services.Utility
         }
 
 
-        public static IQueryable<Student> Sort(this IQueryable<Student> query, StudentQueryParameters request)
+        public static IQueryable<Student> Sort(this IQueryable<Student> query, QueryParameters request)
         {
             return request.Sort switch
             {
@@ -35,7 +35,7 @@ namespace PRN232.LMS.Services.Utility
 
         public static IQueryable<Student> Paging(
             this IQueryable<Student> query,
-            StudentQueryParameters request)
+            QueryParameters request)
         {
             return query.Skip((request.Page - 1) * request.Size).Take(request.Size);
         }

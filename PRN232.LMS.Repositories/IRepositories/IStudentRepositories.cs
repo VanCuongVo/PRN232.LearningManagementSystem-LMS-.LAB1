@@ -4,6 +4,6 @@ namespace PRN232.LMS.Repositories.IRepositories
 {
     public interface IStudentRepositories : IGenericRepositories<Student>
     {
-
+        
     }
 }
