@@ -100,12 +100,12 @@ namespace PRN232.LMS.Services.Services
 
         public async Task<StudentResponse> GetByIdAsync(int id)
         {
-            var student = await _unitOfWork.Students.GetByIdAsync(id);
-            if (student == null)
+            var existingStudents = await _unitOfWork.Students.GetByIdAsync(id);
+            if (existingStudents == null)
             {
                 return null;
             }
-            var toStudentResponse = StudentMapperExtensions.ToStudentResponse(student);
+            var toStudentResponse = StudentMapperExtensions.ToStudentResponse(existingStudents);
             return toStudentResponse;
         }
 

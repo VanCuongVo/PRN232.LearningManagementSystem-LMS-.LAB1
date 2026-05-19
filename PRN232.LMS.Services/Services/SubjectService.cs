@@ -54,9 +54,15 @@ namespace PRN232.LMS.Services
             };
         }
 
-        public Task<SubjectResponse> GetByIdAysnc(int id)
+        public async Task<SubjectResponse> GetByIdAysnc(int id)
         {
-            throw new NotImplementedException();
+            var existingSubjects = await _unitOfWork.Subjects.GetByIdAsync(id);
+            if (existingSubjects == null)
+            {
+                return null;
+            }
+            var response = SubjectMapperExtensions.ToSubjectResponse(existingSubjects);
+            return response;
         }
     }
 }

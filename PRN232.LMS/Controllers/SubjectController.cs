@@ -21,5 +21,12 @@ namespace PRN232.LMS.Controllers
             var result = await _subjectService.GetAllAsync(query);
             return Ok(result);
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetById(int id)
+        {
+            var result = await _subjectService.GetByIdAysnc(id);
+            return Ok(result);
+        }
     }
 }
