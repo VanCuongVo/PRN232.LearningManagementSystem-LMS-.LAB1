@@ -16,5 +16,7 @@ namespace PRN232.LMS.Models.ResponseModel
 
         public DateTime DateOfBirth { get; set; }
 
+        public ICollection<EnrollmentResponse>? Enrollments { get; set; }
+
     }
 }

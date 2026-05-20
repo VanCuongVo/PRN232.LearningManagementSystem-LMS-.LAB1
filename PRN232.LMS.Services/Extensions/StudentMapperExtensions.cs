@@ -16,8 +16,12 @@ namespace PRN232.LMS.Services.Extensions
 
                 Email = student.Email,
 
-                DateOfBirth = student.Dateofbirth
-
+                DateOfBirth = student.Dateofbirth,
+                Enrollments = student.Enrollments.Select(x => new EnrollmentResponse
+                {
+                    EnrollmentId = x.Enrollmentid,
+                    Status = x.Status
+                }).ToList()
             };
         }
         public static List<StudentResponse> ToStudentResponseList(this IEnumerable<Student> students)

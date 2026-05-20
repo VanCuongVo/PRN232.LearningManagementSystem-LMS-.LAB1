@@ -1,4 +1,5 @@
-﻿using PRN232.LMS.Models.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PRN232.LMS.Models.Entities;
 using PRN232.LMS.Models.RequestModel;
 
 namespace PRN232.LMS.Services.Utility
@@ -39,5 +40,26 @@ namespace PRN232.LMS.Services.Utility
         {
             return query.Skip((request.Page - 1) * request.Size).Take(request.Size);
         }
+
+
+        public static IQueryable<Student> Expand(this IQueryable<Student> query, QueryParameters request)
+        {
+            if (string.IsNullOrEmpty(request.Expand))
+            {
+                return query;
+            }
+            var expands = request.Expand.Split(",");
+            foreach (var item in expands)
+            {
+                switch (item.ToLower())
+                {
+                    case "enrollments":
+                        query = query.Include(x => x.Enrollments);
+                        break;
+                }
+            }
+            return query;
+        }
     }
+
 }

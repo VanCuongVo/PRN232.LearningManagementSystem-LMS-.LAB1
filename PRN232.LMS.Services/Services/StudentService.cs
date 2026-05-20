@@ -70,6 +70,9 @@ namespace PRN232.LMS.Services.Services
             // Sort
             studentsQuery = StudentQueryExtensions.Sort(studentsQuery, query);
 
+            // Expand
+            studentsQuery = StudentQueryExtensions.Expand(studentsQuery, query);
+
             // TOTAL ITEMS
             var totalItems = await studentsQuery.CountAsync();
 
