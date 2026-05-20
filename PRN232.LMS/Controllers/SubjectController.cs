@@ -33,21 +33,24 @@ namespace PRN232.LMS.API.Controllers
         public async Task<ActionResult> Create([FromBody] CreateSubjectRequest request)
         {
             var result = await _subjectService.CreateAsync(request);
-            return Ok(result);
+            return CreatedAtAction(nameof(GetById), new
+            {
+                id = result.Data.SubjectId
+            }, result);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody] UpdateSubjectRequest request)
         {
-            var result = await _subjectService.UpdateAsync(id, request);
-            return Ok(result);
+            await _subjectService.UpdateAsync(id, request);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var result = await _subjectService.DeleteAsync(id);
-            return Ok(result);
+            await _subjectService.DeleteAsync(id);
+            return NoContent();
         }
     }
 }
