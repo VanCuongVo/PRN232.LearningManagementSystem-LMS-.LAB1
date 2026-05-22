@@ -9,6 +9,8 @@ namespace PRN232.LMS.Repositories.IRepositories
 
         ISubjectRepositories Subjects { get; }
 
+        ISemestersRepositories Semesters { get; }
+
 
     }
 }

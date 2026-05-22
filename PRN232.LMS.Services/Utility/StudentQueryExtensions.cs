@@ -61,7 +61,6 @@ namespace PRN232.LMS.Services.Utility
             return query;
         }
 
-
         public static object SelectFields<T>(this IEnumerable<T> source, string? fields)
         {
             // Không truyền fields
@@ -69,7 +68,6 @@ namespace PRN232.LMS.Services.Utility
             {
                 return source;
             }
-
             var result = new List<Dictionary<string, object>>();
 
             var fieldList = fields.Split(",");

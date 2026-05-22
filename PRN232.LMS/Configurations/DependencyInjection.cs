@@ -16,6 +16,10 @@ namespace PRN232.LMS.API.Configurations
             services.AddScoped<ISubjectRepositories, SubjectRepositories>();
             services.AddScoped<ISubjectService, SubjectService>();
 
+
+            services.AddScoped<ISemestersRepositories, SemestersRepositories>();
+            services.AddScoped<ISemestersService, SemestersService>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped(

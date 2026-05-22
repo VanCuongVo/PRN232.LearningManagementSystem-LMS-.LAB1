@@ -11,16 +11,19 @@ namespace PRN232.LMS.Repositories.Repositories
 
         public ISubjectRepositories Subjects { get; }
 
+        public ISemestersRepositories Semesters { get; }
+
         public UnitOfWork(
             LmsdbContext context,
             IStudentRepositories students,
-            ISubjectRepositories subjects)
+            ISubjectRepositories subjects,
+            ISemestersRepositories semesters
+            )
         {
             _context = context;
-
             Students = students;
-
             Subjects = subjects;
+            Semesters = semesters;
         }
 
         public async Task<int> SaveChangesAsync()
