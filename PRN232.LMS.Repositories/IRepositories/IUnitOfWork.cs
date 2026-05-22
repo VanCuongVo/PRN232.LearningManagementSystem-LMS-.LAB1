@@ -1,4 +1,5 @@
 ﻿using PRN232.LMS.Models.Entities;
+using PRN232.LMS.Repositories.Repositories;
 
 namespace PRN232.LMS.Repositories.IRepositories
 {
@@ -10,6 +11,8 @@ namespace PRN232.LMS.Repositories.IRepositories
         ISubjectRepositories Subjects { get; }
 
         ISemestersRepositories Semesters { get; }
+
+        ICourseRepository Courses { get; }
 
 
     }
