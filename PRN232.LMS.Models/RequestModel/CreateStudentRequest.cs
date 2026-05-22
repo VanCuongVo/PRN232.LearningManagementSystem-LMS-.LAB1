@@ -1,10 +1,15 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace PRN232.LMS.Models.RequestModel
 {
     public class CreateStudentRequest
     {
-        public string FullName { get; set; }
+        [Required(ErrorMessage = "FullName is required")]
+        public required string FullName { get; set; }
 
-        public string Email { get; set; }
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Email is not valid")]
+        public required string Email { get; set; }
 
         public DateTime DateOfBirth { get; set; }
     }

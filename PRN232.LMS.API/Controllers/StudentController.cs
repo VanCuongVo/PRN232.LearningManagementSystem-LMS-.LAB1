@@ -42,19 +42,52 @@ namespace PRN232.LMS.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateStudentRequest request)
         {
-            var result = await _studentService.CreateAsync(request);
-            return CreatedAtAction(nameof(GetById), new
+            try
             {
-                id = result.Data.StudentId
-            }, result);
+                var result = await _studentService.CreateAsync(request);
+
+                if (!result.success)
+                {
+                    return BadRequest(result);
+                }
+
+                return CreatedAtAction(nameof(GetById), new
+                {
+                    id = result.Data.StudentId
+                }, result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateStudentRequest request)
         {
-            await _studentService.UpdateAsync(id, request);
+            try
+            {
+                var result = await _studentService.UpdateAsync(id, request);
 
-            return NoContent();
+                if (!result.success)
+                {
+                    return BadRequest(result);
+                }
+
+                return NoContent();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

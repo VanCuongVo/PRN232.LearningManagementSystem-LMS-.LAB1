@@ -6,7 +6,7 @@ namespace PRN232.LMS.Services.IServices
     public interface IStudentService
     {
         Task<ApiResponse<object>> GetAllAsync(QueryParameters query);
-        Task<StudentResponse> GetByIdAsync(int id);
+        Task<StudentResponse?> GetByIdAsync(int id);
         Task<ApiResponse<StudentResponse>> CreateAsync(CreateStudentRequest request);
 
         Task<ApiResponse<StudentResponse>> UpdateAsync(int id, UpdateStudentRequest request);
