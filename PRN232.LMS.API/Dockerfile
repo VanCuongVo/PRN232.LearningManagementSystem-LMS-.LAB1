@@ -12,13 +12,13 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["PRN232.LMS/PRN232.LMS.API.csproj", "PRN232.LMS/"]
+COPY ["PRN232.LMS.API/PRN232.LMS.API.csproj", "PRN232.LMS/"]
 COPY ["PRN232.LMS.Services/PRN232.LMS.Services.csproj", "PRN232.LMS.Services/"]
 COPY ["PRN232.LMS.Repositories/PRN232.LMS.Repositories.csproj", "PRN232.LMS.Repositories/"]
 COPY ["PRN232.LMS.Models/PRN232.LMS.Models.csproj", "PRN232.LMS.Models/"]
 RUN dotnet restore "./PRN232.LMS/PRN232.LMS.API.csproj"
 COPY . .
-WORKDIR "/src/PRN232.LMS"
+WORKDIR "/src/PRN232.LMS.API"
 RUN dotnet build "./PRN232.LMS.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
