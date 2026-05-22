@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PRN232.LMS.API.Configurations;
 using PRN232.LMS.Repositories;
 using PRN232.LMS.Repositories.Data;
 using PRN232.LMS.Repositories.IRepositories;
@@ -6,13 +7,7 @@ using PRN232.LMS.Repositories.Repositories;
 using PRN232.LMS.Services;
 using PRN232.LMS.Services.IServices;
 using PRN232.LMS.Services.Services;
-
-
-
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddDbContext<LmsdbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 
@@ -21,16 +16,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IStudentRepositories, StudentRepositoies>();
-builder.Services.AddScoped<IStudentService, StudentService>();
-builder.Services.AddScoped<ISubjectRepositories, SubjectRepositories>();
-builder.Services.AddScoped<ISubjectService, SubjectService>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped(
-    typeof(IGenericRepositories<>),
-    typeof(GenericRepositories<>)
-);
-
+builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddDependencyInjection();
 
 
 var app = builder.Build();
@@ -43,14 +30,9 @@ using (var scope = app.Services.CreateScope())
     DbSeeder.Seed(db);
 }
 // Configure the HTTP request pipeline.
-
 app.UseSwagger();
 app.UseSwaggerUI();
 // app.UseHttpsRedirection();
-
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

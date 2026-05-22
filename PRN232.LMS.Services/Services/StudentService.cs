@@ -83,6 +83,9 @@ namespace PRN232.LMS.Services.Services
 
             var response = StudentMapperExtensions.ToStudentResponseList(students);
 
+
+            // var shapedData = response.SelectFields(query.Fields);
+
             return new ApiResponse<List<StudentResponse>>
             {
                 success = true,
