@@ -20,7 +20,13 @@ namespace PRN232.LMS.Services.Extensions
                 Enrollments = student.Enrollments.Select(x => new EnrollmentResponse
                 {
                     EnrollmentId = x.Enrollmentid,
-                    Status = x.Status
+                    Status = x.Status,
+                    EnrollDate = x.Enrolldate,
+                    CourseId = x.Course.Courseid,
+                    CourseName = x.Course.Coursename,
+                    StudentId = x.Student.Studentid,
+                    StudentName = x.Student.Fullname,
+                    StudentEmail = x.Student.Email
                 }).ToList()
             };
         }

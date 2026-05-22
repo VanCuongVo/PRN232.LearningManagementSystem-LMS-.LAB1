@@ -14,6 +14,8 @@ namespace PRN232.LMS.Repositories.IRepositories
 
         ICourseRepository Courses { get; }
 
+        IEnrollmentRepositories Enrollments { get; }
+
 
     }
 }

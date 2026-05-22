@@ -1,6 +1,7 @@
 using PRN232.LMS.Repositories.IRepositories;
 using PRN232.LMS.Repositories.Repositories;
 using PRN232.LMS.Services;
+using PRN232.LMS.Services.Interfaces;
 using PRN232.LMS.Services.IServices;
 using PRN232.LMS.Services.Services;
 
@@ -23,6 +24,10 @@ namespace PRN232.LMS.API.Configurations
 
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<ICourseService, CourseService>();
+
+            services.AddScoped<IEnrollmentRepositories, EnrollmentRepositories>();
+            services.AddScoped<IEnrollmentService, EnrollmentService>();
+
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

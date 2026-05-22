@@ -16,7 +16,9 @@ namespace PRN232.LMS.Services.Extensions
                 Courses = semesters.Courses.Select(x => new CourseResponse
                 {
                     CourseId = x.Courseid,
-                    CourseName = x.Coursename
+                    CourseName = x.Coursename,
+                    SemesterId = semesters.Semesterid,
+                    SemesterName = semesters.Semestername
                 }).ToList()
             };
         }
