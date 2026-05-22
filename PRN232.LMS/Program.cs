@@ -18,8 +18,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddDependencyInjection();
-
-
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
