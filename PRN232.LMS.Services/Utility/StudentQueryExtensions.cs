@@ -68,6 +68,7 @@ namespace PRN232.LMS.Services.Utility
             {
                 return source;
             }
+            
             var result = new List<Dictionary<string, object>>();
 
             var fieldList = fields.Split(",");

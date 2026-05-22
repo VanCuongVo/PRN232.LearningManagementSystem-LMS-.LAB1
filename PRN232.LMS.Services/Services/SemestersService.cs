@@ -68,20 +68,21 @@ namespace PRN232.LMS.Services.Services
             };
         }
 
-        public async Task<ApiResponse<List<SemesterResponse>>> GetAllAsync(QueryParameters query)
+        public async Task<ApiResponse<object>> GetAllAsync(QueryParameters query)
         {
-            var semesterQuery = _uniOfWork.Semesters.GetQueryable().Search(query).Sort(query).Paging(query);
+            var semesterQuery = _uniOfWork.Semesters.GetQueryable().Search(query).Sort(query).Paging(query).Expand(query);
             var totalItems = await semesterQuery.CountAsync();
 
             var semesters = await semesterQuery.ToListAsync();
 
             var responses = semesters.ToSemesterReponseList();
+            var shapedData = responses.SelectFields(query.Fields);
 
-            return new ApiResponse<List<SemesterResponse>>
+            return new ApiResponse<object>
             {
                 success = true,
                 message = "Get semester successfully",
-                Data = responses,
+                Data = shapedData,
                 pagination = new PaginationMetadata
                 {
                     Page = query.Page,
@@ -92,8 +93,8 @@ namespace PRN232.LMS.Services.Services
                                 (double)totalItems
                                 / query.Size)
                 }
-            };
-
+            }
+            ;
         }
 
         public async Task<SemesterResponse> GetByIdAsync(int id)
