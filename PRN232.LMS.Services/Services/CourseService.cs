@@ -20,7 +20,7 @@ namespace PRN232.LMS.Services.Services
         {
             var createCourse = new Course
             {
-                Courseid = request.Courseid,
+                Courseid = request.CourseId,
                 Coursename = request.CourseName,
                 Semesterid = request.SemesterId
             };

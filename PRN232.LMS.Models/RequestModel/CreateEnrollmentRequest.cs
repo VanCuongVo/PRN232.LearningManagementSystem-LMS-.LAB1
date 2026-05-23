@@ -2,7 +2,7 @@ namespace PRN232.LMS.Models.RequestModel
 {
     public class CreateEnrollmentRequest
     {
-        public int Enrollmentid { get; set; }
+        public int EnrollmentId { get; set; }
         public int StudentId { get; set; }
 
         public int CourseId { get; set; }

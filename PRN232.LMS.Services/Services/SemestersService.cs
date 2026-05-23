@@ -21,7 +21,7 @@ namespace PRN232.LMS.Services.Services
         {
             var createSemestesRequest = new Semester
             {
-                Semesterid = request.Semesterid,
+                Semesterid = request.SemesterId,
                 Semestername = request.SemesterName,
                 Enddate = DateTime.SpecifyKind(request.EndDate, DateTimeKind.Utc),
                 Startdate = DateTime.SpecifyKind(request.StartDate, DateTimeKind.Utc),
@@ -93,8 +93,7 @@ namespace PRN232.LMS.Services.Services
                                 (double)totalItems
                                 / query.Size)
                 }
-            }
-            ;
+            };
         }
 
         public async Task<SemesterResponse> GetByIdAsync(int id)

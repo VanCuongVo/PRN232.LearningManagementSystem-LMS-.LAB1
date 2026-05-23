@@ -8,6 +8,8 @@ namespace PRN232.LMS.Models.RequestModel
 {
     public class QueryParameters
     {
+
+
         public string? Search { get; set; }
 
         public string? Sort { get; set; }

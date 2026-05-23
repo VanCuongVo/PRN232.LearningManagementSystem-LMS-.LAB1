@@ -27,7 +27,7 @@ namespace PRN232.LMS.Services.Services
                 Courseid = request.CourseId,
                 Enrolldate = DateTime.SpecifyKind(request.EnrollDate, DateTimeKind.Utc),
                 Status = request.Status,
-                Enrollmentid = request.Enrollmentid
+                Enrollmentid = request.EnrollmentId
             };
             await _unitOFWork.Enrollments.AddAsync(enrollment);
             await _unitOFWork.SaveChangesAsync();

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using PRN232.LMS.API.Configurations;
 using PRN232.LMS.Repositories;
@@ -18,6 +19,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddDependencyInjection();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.OperationFilter<LowercaseQueryParameterFilter>();
+});
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
