@@ -5,19 +5,40 @@ namespace PRN232.LMS.Services.Extensions
 {
     public static class CourseMapperExtension
     {
-        public static CourseResponse ToCourseResponse(Course course)
+        public static CourseResponse ToCourseResponse(this Course course)
         {
             return new CourseResponse
             {
                 CourseId = course.Courseid,
                 CourseName = course.Coursename,
                 SemesterId = course.Semesterid,
-                SemesterName = course.Semester?.Semestername ?? string.Empty
+                SemesterName = course.Semester?.Semestername ?? string.Empty,
+                Enrollments = course.Enrollments.Select(x => new EnrollmentInCourseResponse
+                {
+                    EnrollmentId = x.Enrollmentid,
+                    EnrollDate = x.Enrolldate,
+
+                    Status = x.Status ?? string.Empty,
+
+                    StudentId = x.Studentid,
+
+                    StudentName = x.Student?.Fullname ?? string.Empty
+
+                }).ToList(),
+                Students = course.Enrollments.Select(x => new StudentInCourseResponse
+                {
+                    StudentId = x.Student!.Studentid,
+
+                    FullName = x.Student.Fullname,
+
+                    Email = x.Student.Email
+
+                }).ToList()
             };
         }
 
         public static List<CourseResponse> ToCourseResponseList(
-           List<Course> courses)
+          this List<Course> courses)
         {
             return courses
                 .Select(ToCourseResponse)

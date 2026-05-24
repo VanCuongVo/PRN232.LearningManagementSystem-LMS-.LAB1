@@ -108,7 +108,7 @@ namespace PRN232.LMS.Services.Services
 
         public async Task<StudentResponse?> GetByIdAsync(int id)
         {
-            var existingStudents = await _unitOfWork.Students.GetQueryable().Include(x => x.Enrollments).FirstOrDefaultAsync(x => x.Studentid == id);
+            var existingStudents = await _unitOfWork.Students.GetQueryable().Include(x => x.Enrollments).ThenInclude(x => x.Course).FirstOrDefaultAsync(x => x.Studentid == id);
             if (existingStudents == null)
             {
                 return null;

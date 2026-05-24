@@ -16,7 +16,21 @@ namespace PRN232.LMS.Services.Extensions
                 StudentName = enrollment.Student.Fullname,
                 StudentEmail = enrollment.Student.Email,
                 CourseId = enrollment.Course.Courseid,
-                CourseName = enrollment.Course.Coursename
+                CourseName = enrollment.Course.Coursename,
+                Student = new StudentInEnrollmentResponse
+                {
+                    StudentId = enrollment.Student.Studentid,
+
+                    FullName = enrollment.Student.Fullname,
+
+                    Email = enrollment.Student.Email
+                },
+                Course = new CourseInEnrollmentResponse
+                {
+                    CourseId = enrollment.Course.Courseid,
+
+                    CourseName = enrollment.Course.Coursename
+                }
             };
         }
 

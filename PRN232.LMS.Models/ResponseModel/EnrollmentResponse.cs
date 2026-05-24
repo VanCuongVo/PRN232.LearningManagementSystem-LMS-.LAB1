@@ -20,5 +20,9 @@ namespace PRN232.LMS.Models.ResponseModel
         public int CourseId { get; set; }
 
         public string CourseName { get; set; } = null!;
+
+        public StudentInEnrollmentResponse? Student { get; set; }
+
+        public CourseInEnrollmentResponse? Course { get; set; }
     }
 }

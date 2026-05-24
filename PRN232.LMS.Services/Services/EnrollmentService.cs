@@ -41,17 +41,19 @@ namespace PRN232.LMS.Services.Services
             };
         }
 
-        public async Task<ApiResponse<List<EnrollmentResponse>>> GetAllAsync(QueryParameters query)
+        public async Task<ApiResponse<object>> GetAllAsync(QueryParameters query)
         {
-            var enrollermentQuery = _unitOFWork.Enrollments.GetQueryable().Include(x => x.Student).Include(x => x.Course).Search(query).Sort(query).Paging(query);
+            var enrollermentQuery = _unitOFWork.Enrollments.GetQueryable().Include(x => x.Student).Include(x => x.Course).Search(query).Sort(query).Paging(query).Expand(query);
             var totalItems = await enrollermentQuery.CountAsync();
             var enrollments = await enrollermentQuery.ToListAsync();
             var result = enrollments.ToEnrollmentResponseList();
-            return new ApiResponse<List<EnrollmentResponse>>
+
+            var shapedData = result.SelectFields(query.Fields);
+            return new ApiResponse<object>
             {
                 success = true,
                 message = "Get enrollments successfully",
-                Data = result,
+                Data = shapedData,
                 pagination = new PaginationMetadata
                 {
                     Page = query.Page,

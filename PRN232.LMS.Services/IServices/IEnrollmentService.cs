@@ -5,7 +5,7 @@ namespace PRN232.LMS.Services.Interfaces
 {
     public interface IEnrollmentService
     {
-        Task<ApiResponse<List<EnrollmentResponse>>> GetAllAsync(QueryParameters query);
+        Task<ApiResponse<object>> GetAllAsync(QueryParameters query);
 
         Task<EnrollmentResponse?> GetByIdAsync(int id);
         Task<ApiResponse<EnrollmentResponse>> CreateAsync(

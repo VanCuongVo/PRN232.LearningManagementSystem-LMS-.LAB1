@@ -5,6 +5,7 @@ using PRN232.LMS.Models.ResponseModel;
 using PRN232.LMS.Repositories.IRepositories;
 using PRN232.LMS.Services.Extensions;
 using PRN232.LMS.Services.IServices;
+using PRN232.LMS.Services.Utility;
 
 namespace PRN232.LMS.Services.Services
 {
@@ -64,24 +65,20 @@ namespace PRN232.LMS.Services.Services
 
         }
 
-        public async Task<ApiResponse<List<CourseResponse>>> GetAllAsync(QueryParameters query)
+        public async Task<ApiResponse<object>> GetAllAsync(QueryParameters query)
         {
-            var coursesQuery = _unitOfWork.Courses
-              .GetQueryable()
-              .Include(x => x.Semester);
+            var coursesQuery = _unitOfWork.Courses.GetQueryable().Include(x => x.Semester).
+                                                                      Search(query).Sort(query).Paging(query).Expand(query);
             var totalItems = await coursesQuery.CountAsync();
-            var courses = await coursesQuery
-             .Skip((query.Page - 1) * query.Size)
-             .Take(query.Size)
-             .ToListAsync();
-            var response =
-              CourseMapperExtension
-                  .ToCourseResponseList(courses);
-            return new ApiResponse<List<CourseResponse>>
+            var courses = await coursesQuery.ToListAsync();
+            var response = courses.ToCourseResponseList();
+
+            var shapedData = response.SelectFields(query.Fields);
+            return new ApiResponse<object>
             {
                 success = true,
                 message = "Get courses successfully",
-                Data = response,
+                Data = shapedData,
 
                 pagination = new PaginationMetadata
                 {
