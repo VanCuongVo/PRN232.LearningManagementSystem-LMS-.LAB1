@@ -5,6 +5,35 @@ namespace PRN232.LMS.Services.Extensions
 {
     public static class CourseMapperExtension
     {
+
+
+        public static CourseEnrollmentResponse ToCourseEnrollmentResponse(this Enrollment enrollment)
+        {
+            return new CourseEnrollmentResponse
+            {
+                EnrollmentId = enrollment.Enrollmentid,
+
+                EnrollDate = enrollment.Enrolldate,
+
+                Status = enrollment.Status,
+
+                StudentId = enrollment.Studentid,
+
+                CourseId = enrollment.Courseid,
+
+                Student = enrollment.Student == null
+                ? null
+                : new StudentInEnrollmentResponse
+                {
+                    StudentId = enrollment.Student.Studentid,
+
+                    FullName = enrollment.Student.Fullname,
+
+                    Email = enrollment.Student.Email
+                }
+            };
+
+        }
         public static CourseResponse ToCourseResponse(this Course course)
         {
             return new CourseResponse

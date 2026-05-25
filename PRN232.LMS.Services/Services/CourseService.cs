@@ -113,23 +113,7 @@ namespace PRN232.LMS.Services.Services
         {
             var enrollments = _unitOfWork.Enrollments.GetQueryable().Where(x => x.Courseid == courseId).Expand(query);
             var result = await enrollments.ToListAsync();
-            return result.Select(x => new CourseEnrollmentResponse
-            {
-                EnrollmentId = x.Enrollmentid,
-                EnrollDate = x.Enrolldate,
-                Status = x.Status,
-                StudentId = x.Studentid,
-                CourseId = x.Courseid,
-                Student = x.Student == null
-           ? null
-           : new StudentInEnrollmentResponse
-           {
-               StudentId = x.Student.Studentid,
-               FullName = x.Student.Fullname,
-               Email = x.Student.Email
-           }
-            }).ToList();
-
+            return result.Select(x => x.ToCourseEnrollmentResponse()).ToList();
         }
 
         public async Task<ApiResponse<CourseResponse>> UpdateAsync(int id, UpdateCourseRequest request)
