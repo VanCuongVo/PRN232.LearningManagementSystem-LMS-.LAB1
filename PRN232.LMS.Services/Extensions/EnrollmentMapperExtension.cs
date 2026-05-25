@@ -12,11 +12,6 @@ namespace PRN232.LMS.Services.Extensions
                 EnrollmentId = enrollment.Enrollmentid,
                 EnrollDate = enrollment.Enrolldate,
                 Status = enrollment.Status,
-                StudentId = enrollment.Student.Studentid,
-                StudentName = enrollment.Student.Fullname,
-                StudentEmail = enrollment.Student.Email,
-                CourseId = enrollment.Course.Courseid,
-                CourseName = enrollment.Course.Coursename,
                 Student = new StudentInEnrollmentResponse
                 {
                     StudentId = enrollment.Student.Studentid,

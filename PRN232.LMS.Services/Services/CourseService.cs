@@ -96,7 +96,7 @@ namespace PRN232.LMS.Services.Services
         {
             var existingCourse = await _unitOfWork.Courses
                  .GetQueryable()
-                 .Include(x => x.Semester)
+                 .Include(x => x.Semester).Include(x => x.Enrollments).ThenInclude(x => x.Student)
                  .FirstOrDefaultAsync(
                      x => x.Courseid == id);
 

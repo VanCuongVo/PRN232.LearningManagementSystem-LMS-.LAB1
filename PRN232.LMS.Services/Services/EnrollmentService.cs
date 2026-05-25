@@ -78,7 +78,6 @@ namespace PRN232.LMS.Services.Services
             {
                 return null;
             }
-
             return enrollment.ToEnrollmentResponse();
         }
 
