@@ -43,10 +43,10 @@ namespace PRN232.LMS.Services.Utility
             {
                 switch (item.ToLower())
                 {
-                    case "enrollments":
+                    case "enrollment":
                         query = query.Include(x => x.Enrollments);
                         break;
-                    case "students":
+                    case "student":
                         query = query.Include(x => x.Enrollments).ThenInclude(x => x.Student);
                         break;
                 }

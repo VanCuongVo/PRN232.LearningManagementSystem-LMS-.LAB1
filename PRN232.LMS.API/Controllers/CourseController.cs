@@ -43,6 +43,16 @@ namespace PRN232.LMS.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{id}/enrollments")]
+        public async Task<IActionResult> GetEnrollments(
+       int id,
+       [FromQuery] QueryParameters query)
+        {
+            var result = await _courseService.GetEnrollmentsAsync(id, query);
+
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<ActionResult> Create(
             [FromBody] CreateCourseRequest request)

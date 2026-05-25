@@ -18,5 +18,7 @@ namespace PRN232.LMS.Services.IServices
             UpdateCourseRequest request);
 
         Task<ApiResponse<bool>> DeleteAsync(int id);
+
+        Task<List<CourseEnrollmentResponse>> GetEnrollmentsAsync(int courseId, QueryParameters query);
     }
 }
