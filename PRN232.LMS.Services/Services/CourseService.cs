@@ -45,8 +45,7 @@ namespace PRN232.LMS.Services.Services
             var course = await _unitOfWork.Courses.GetByIdAsync(id);
             if (course != null)
             {
-                await _unitOfWork.Courses
-                    .DeleteAsync(course.Courseid);
+                await _unitOfWork.Courses.DeleteAsync(course.Courseid);
 
                 await _unitOfWork.SaveChangesAsync();
 
@@ -68,9 +67,9 @@ namespace PRN232.LMS.Services.Services
         public async Task<ApiResponse<object>> GetAllAsync(QueryParameters query)
         {
             var coursesQuery = _unitOfWork.Courses.GetQueryable().Include(x => x.Semester).
-                                                                      Search(query).Sort(query).Paging(query).Expand(query);
+                                                                      Search(query).Expand(query);
             var totalItems = await coursesQuery.CountAsync();
-            var courses = await coursesQuery.ToListAsync();
+            var courses = await coursesQuery.Sort(query).Paging(query).ToListAsync();
             var response = courses.ToCourseResponseList();
 
             var shapedData = response.SelectFields(query.Fields);
@@ -105,15 +104,32 @@ namespace PRN232.LMS.Services.Services
                 return null;
             }
 
-            return CourseMapperExtension
-                .ToCourseResponse(existingCourse);
+            return CourseMapperExtension.ToCourseResponse(existingCourse);
         }
 
-        public async Task<List<CourseEnrollmentResponse>> GetEnrollmentsAsync(int courseId, QueryParameters query)
+        public async Task<ApiResponse<object>> GetEnrollmentsAsync(int courseId, QueryParameters query)
         {
-            var enrollments = _unitOfWork.Enrollments.GetQueryable().Where(x => x.Courseid == courseId).Expand(query);
-            var result = await enrollments.ToListAsync();
-            return result.Select(x => x.ToCourseEnrollmentResponse()).ToList();
+            var enrollmentsQuery = _unitOfWork.Enrollments.GetQueryable().Where(x => x.Courseid == courseId).Expand(query).Search(query);
+            var totalItems = await enrollmentsQuery.CountAsync();
+            var enrollments = await enrollmentsQuery.Sort(query).Paging(query).ToListAsync();
+            var response = enrollments.Select(x => x.ToCourseEnrollmentResponse()).ToList();
+            var shapedData = response.SelectFields(query.Fields);
+            return new ApiResponse<object>
+            {
+                success = true,
+                message = "Get courses enrollments successfull",
+                Data = shapedData,
+
+                pagination = new PaginationMetadata
+                {
+                    Page = query.Page,
+                    PageSize = query.Size,
+                    TotalItems = totalItems,
+
+                    TotalPages = (int)Math.Ceiling(
+                (double)totalItems / query.Size)
+                }
+            };
         }
 
         public async Task<ApiResponse<CourseResponse>> UpdateAsync(int id, UpdateCourseRequest request)
@@ -133,8 +149,7 @@ namespace PRN232.LMS.Services.Services
             course.Coursename = request.CourseName;
             course.Semesterid = request.SemesterId;
 
-            await _unitOfWork.Courses
-                .UpdateAsync(course);
+            await _unitOfWork.Courses.UpdateAsync(course);
 
             await _unitOfWork.SaveChangesAsync();
             return new ApiResponse<CourseResponse>

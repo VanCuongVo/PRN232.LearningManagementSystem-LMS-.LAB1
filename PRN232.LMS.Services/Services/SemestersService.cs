@@ -70,10 +70,10 @@ namespace PRN232.LMS.Services.Services
 
         public async Task<ApiResponse<object>> GetAllAsync(QueryParameters query)
         {
-            var semesterQuery = _uniOfWork.Semesters.GetQueryable().Search(query).Sort(query).Paging(query).Expand(query);
+            var semesterQuery = _uniOfWork.Semesters.GetQueryable().Search(query).Expand(query);
             var totalItems = await semesterQuery.CountAsync();
 
-            var semesters = await semesterQuery.ToListAsync();
+            var semesters = await semesterQuery.Sort(query).Paging(query).ToListAsync();
 
             var responses = semesters.ToSemesterReponseList();
             var shapedData = responses.SelectFields(query.Fields);

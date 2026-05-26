@@ -61,21 +61,13 @@ namespace PRN232.LMS.Services
         public async Task<ApiResponse<IEnumerable<SubjectResponse>>> GetAllAsync(QueryParameters query)
         {
             IQueryable<Subject> subjectQuery = _unitOfWork.Subjects.GetQueryable();
-
             // Search 
             subjectQuery = StubjectQueryExtensions.Search(subjectQuery, query);
-
-            // Sort 
-
-            subjectQuery = StubjectQueryExtensions.Sort(subjectQuery, query);
-
             // Total Items
             int totalItems = await subjectQuery.CountAsync();
-
-
+            // Sort 
+            subjectQuery = StubjectQueryExtensions.Sort(subjectQuery, query);
             subjectQuery = StubjectQueryExtensions.Paging(subjectQuery, query);
-
-
             List<Subject> subjects = await subjectQuery.ToListAsync();
 
             var response = SubjectMapperExtensions.ToSubjectResponseList(subjects);

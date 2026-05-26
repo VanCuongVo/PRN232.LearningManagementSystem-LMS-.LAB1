@@ -32,7 +32,6 @@ namespace PRN232.LMS.Services.Extensions
                     Email = enrollment.Student.Email
                 }
             };
-
         }
         public static CourseResponse ToCourseResponse(this Course course)
         {

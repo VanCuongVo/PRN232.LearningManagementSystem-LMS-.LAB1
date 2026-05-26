@@ -19,6 +19,6 @@ namespace PRN232.LMS.Services.IServices
 
         Task<ApiResponse<bool>> DeleteAsync(int id);
 
-        Task<List<CourseEnrollmentResponse>> GetEnrollmentsAsync(int courseId, QueryParameters query);
+        Task<ApiResponse<object>> GetEnrollmentsAsync(int courseId, QueryParameters query);
     }
 }
