@@ -10,13 +10,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(options =>
 {
     options.RespectBrowserAcceptHeader = true;
+
     options.ReturnHttpNotAcceptable = true;
 
-    options.OutputFormatters.Add(new CsvOutputFormatter());
-    options.OutputFormatters.Add(new HtmlOutputFormatter());
-})
-.AddXmlSerializerFormatters()
-.AddXmlDataContractSerializerFormatters();
+    options.OutputFormatters.Add(
+        new CsvOutputFormatter());
+
+    options.OutputFormatters.Add(
+        new HtmlOutputFormatter());
+
+    options.OutputFormatters.Add(
+        new XmlOutputFormatter());
+});
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -44,7 +49,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Middleware
-
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -53,7 +57,5 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseAuthorization();
-
 app.MapControllers();
-
 await app.RunAsync();

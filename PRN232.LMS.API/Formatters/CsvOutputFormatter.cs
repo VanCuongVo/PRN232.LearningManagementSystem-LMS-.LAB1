@@ -35,64 +35,186 @@ namespace PRN232.LMS.API.Formatters
 
             var objectType = context.Object.GetType();
 
-            // Lấy property Data
-            var dataProperty = objectType.GetProperty("Data");
+            var dataProperty =
+                objectType.GetProperty("Data");
 
             if (dataProperty == null)
             {
-                await response.WriteAsync("No Data property");
+                await response.WriteAsync(
+                    "No Data property");
+
                 return;
             }
 
-            var data = dataProperty.GetValue(context.Object);
+            var data =
+                dataProperty.GetValue(context.Object);
 
             if (data == null)
             {
-                await response.WriteAsync("Empty data");
+                await response.WriteAsync(
+                    "Empty data");
+
                 return;
             }
 
-            // IEnumerable
-            if (data is System.Collections.IEnumerable enumerable)
+            if (data is System.Collections.IEnumerable enumerable
+                && data is not string)
             {
-                var items = enumerable.Cast<object>().ToList();
+                var items =
+                    enumerable.Cast<object>().ToList();
 
                 if (!items.Any())
                 {
-                    await response.WriteAsync("No rows");
+                    await response.WriteAsync(
+                        "No rows");
+
                     return;
                 }
 
-                var properties = items[0]
-                    .GetType()
-                    .GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
                 var builder = new StringBuilder();
 
-                // Header
-                builder.AppendLine(
-                    string.Join(",", properties.Select(p => p.Name)));
-
-                // Rows
-                foreach (var item in items)
+                // =========================
+                // Dictionary
+                // =========================
+                if (items[0]
+                    is Dictionary<string, object> dict)
                 {
-                    var values = properties.Select(p =>
+                    builder.AppendLine(
+                        string.Join(",", dict.Keys));
+
+                    foreach (var item in items)
                     {
-                        var value = p.GetValue(item);
+                        var row =
+                            item as Dictionary<string, object>;
 
-                        return value?.ToString()?.Replace(",", " ")
-                               ?? "";
-                    });
+                        var values =
+                            row!.Values.Select(v =>
+                                FormatValue(v));
 
-                    builder.AppendLine(string.Join(",", values));
+                        builder.AppendLine(
+                            string.Join(",", values));
+                    }
                 }
 
-                await response.WriteAsync(builder.ToString());
+                // =========================
+                // Normal Object
+                // =========================
+                else
+                {
+                    var properties = items[0]
+                        .GetType()
+                        .GetProperties(
+                            BindingFlags.Public |
+                            BindingFlags.Instance)
+                        .Where(p =>
+                            p.GetIndexParameters().Length == 0)
+                        .ToList();
+
+                    // Header
+                    builder.AppendLine(
+                        string.Join(",",
+                            properties.Select(p => p.Name)));
+
+                    // Rows
+                    foreach (var item in items)
+                    {
+                        var values = properties.Select(p =>
+                        {
+                            try
+                            {
+                                var value =
+                                    p.GetValue(item);
+
+                                return FormatValue(value);
+                            }
+                            catch
+                            {
+                                return "";
+                            }
+                        });
+
+                        builder.AppendLine(
+                            string.Join(",", values));
+                    }
+                }
+
+                response.ContentType = "text/csv";
+
+                await response.WriteAsync(
+                    builder.ToString());
 
                 return;
             }
 
-            await response.WriteAsync(data.ToString());
+            await response.WriteAsync(
+                data.ToString());
+        }
+
+        private string FormatValue(object? value)
+        {
+            if (value == null)
+                return "";
+
+            // =========================
+            // List
+            // =========================
+            if (value is System.Collections.IEnumerable list
+                && value is not string)
+            {
+                var listValues = new List<string>();
+
+                foreach (var item in list)
+                {
+                    if (item == null)
+                        continue;
+
+                    listValues.Add(
+                        FormatValue(item));
+                }
+
+                return string.Join(" | ", listValues);
+            }
+
+            var type = value.GetType();
+
+            // =========================
+            // Primitive
+            // =========================
+            if (type.IsPrimitive
+                || value is string
+                || value is decimal
+                || value is DateTime
+                || value is Guid
+                || value is Enum)
+            {
+                return value.ToString()
+                    ?.Replace(",", " ")
+                    ?? "";
+            }
+
+            // =========================
+            // Complex Object
+            // =========================
+            var props = type.GetProperties(
+                BindingFlags.Public |
+                BindingFlags.Instance)
+                .Where(p =>
+                    p.GetIndexParameters().Length == 0);
+
+            var values = props.Select(p =>
+            {
+                try
+                {
+                    return p.GetValue(value)
+                        ?.ToString();
+                }
+                catch
+                {
+                    return "";
+                }
+            });
+
+            return string.Join(" | ", values);
         }
     }
 }

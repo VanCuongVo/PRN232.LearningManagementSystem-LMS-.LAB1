@@ -64,7 +64,7 @@ namespace PRN232.LMS.Services.Services
             };
         }
 
-        public async Task<ApiResponse<List<StudentResponse>>> GetAllAsync(
+        public async Task<ApiResponse<object>> GetAllAsync(
     QueryParameters query)
         {
             var studentsQuery = _unitOfWork.Students.GetQueryable();
@@ -83,11 +83,13 @@ namespace PRN232.LMS.Services.Services
 
             var response = StudentMapperExtensions.ToStudentResponseList(students);
 
-            return new ApiResponse<List<StudentResponse>>
+            var shapeData = response.SelectFields(query.Fields);
+
+            return new ApiResponse<object>
             {
                 success = true,
                 message = "Get students successfully",
-                Data = response,
+                Data = shapeData,
                 pagination = new PaginationMetadata
                 {
                     Page = query.Page,
