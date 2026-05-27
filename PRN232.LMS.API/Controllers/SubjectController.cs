@@ -1,9 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using PRN232.LMS.Models.RequestModel;
+using PRN232.LMS.Models.ResponseModel;
 using PRN232.LMS.Services;
 
 namespace PRN232.LMS.API.Controllers
 {
+    [ProducesResponseType(
+    typeof(ApiResponse<object>),
+    StatusCodes.Status200OK,
+    "application/json",
+    "application/xml",
+    "text/csv",
+    "text/html"
+)]
     [Route("api/subjects")]
     [ApiController]
     public class SubjectController : ControllerBase

@@ -1,9 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using PRN232.LMS.Models.RequestModel;
+using PRN232.LMS.Models.ResponseModel;
 using PRN232.LMS.Services.IServices;
 
 namespace PRN232.LMS.API.Controllers
 {
+    [ProducesResponseType(
+    typeof(ApiResponse<object>),
+    StatusCodes.Status200OK,
+    "application/json",
+    "application/xml",
+    "text/csv",
+    "text/html"
+)]
     [Route("api/courses")]
     [ApiController]
     public class CourseController : ControllerBase
@@ -14,13 +23,11 @@ namespace PRN232.LMS.API.Controllers
         {
             _courseService = courseService;
         }
-
         [HttpGet]
-        public async Task<ActionResult> GetAll(
-            [FromQuery] QueryParameters request)
+        public async Task<ActionResult<object>> GetAll(
+         [FromQuery] QueryParameters request)
         {
-            var result =
-                await _courseService.GetAllAsync(request);
+            var result = await _courseService.GetAllAsync(request);
 
             return Ok(result);
         }

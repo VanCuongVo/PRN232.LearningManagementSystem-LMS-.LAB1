@@ -81,7 +81,7 @@ namespace PRN232.LMS.Services
                 {
                     PageSize = query.Size,
                     Page = query.Page,
-                    TotalItems = totalItems,
+                    TotalItems = totalItems,    
                     TotalPages = (int)Math.Ceiling((double)totalItems / query.Size),
                 }
             };

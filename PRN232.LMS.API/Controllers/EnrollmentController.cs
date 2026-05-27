@@ -5,6 +5,14 @@ using PRN232.LMS.Services.Interfaces;
 
 namespace PRN232.LMS.API.Controllers;
 
+[ProducesResponseType(
+    typeof(ApiResponse<object>),
+    StatusCodes.Status200OK,
+    "application/json",
+    "application/xml",
+    "text/csv",
+    "text/html"
+)]
 [Route("api/enrollments")]
 [ApiController]
 public class EnrollmentController : ControllerBase

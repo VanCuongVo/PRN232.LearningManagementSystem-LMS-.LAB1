@@ -1,42 +1,58 @@
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using PRN232.LMS.API.Configurations;
-using PRN232.LMS.Repositories;
+using PRN232.LMS.API.Formatters;
 using PRN232.LMS.Repositories.Data;
-using PRN232.LMS.Repositories.IRepositories;
-using PRN232.LMS.Repositories.Repositories;
-using PRN232.LMS.Services;
-using PRN232.LMS.Services.IServices;
-using PRN232.LMS.Services.Services;
+using Microsoft.OpenApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Controllers
+builder.Services.AddControllers(options =>
+{
+    options.RespectBrowserAcceptHeader = true;
+    options.ReturnHttpNotAcceptable = true;
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    options.OutputFormatters.Add(new CsvOutputFormatter());
+    options.OutputFormatters.Add(new HtmlOutputFormatter());
+})
+.AddXmlSerializerFormatters()
+.AddXmlDataContractSerializerFormatters();
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "PRN232.LMS API", Version = "v1" });
+    options.OperationFilter<LowercaseQueryParameterFilter>();
+});
 
+// Database
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddDependencyInjection();
 
-builder.Services.AddSwaggerGen(options =>
-{
-    options.OperationFilter<LowercaseQueryParameterFilter>();
-});
 var app = builder.Build();
 
+// DB migrate + seed
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<LmsdbContext>();
 
-    db.Database.Migrate();
+    await db.Database.MigrateAsync();
     DbSeeder.Seed(db);
 }
-// Configure the HTTP request pipeline.
+
+// Middleware
+app.UseHttpsRedirection();
+
 app.UseSwagger();
-app.UseSwaggerUI();
-// app.UseHttpsRedirection();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PRN232.LMS API v1");
+    c.RoutePrefix = "swagger"; // serve UI at /swagger
+});
+
 app.UseAuthorization();
+
 app.MapControllers();
-app.Run();
+
+await app.RunAsync();

@@ -64,49 +64,40 @@ namespace PRN232.LMS.Services.Services
             };
         }
 
-        public async Task<ApiResponse<object>> GetAllAsync(QueryParameters query)
+        public async Task<ApiResponse<List<StudentResponse>>> GetAllAsync(
+    QueryParameters query)
         {
             var studentsQuery = _unitOfWork.Students.GetQueryable();
 
-            // Search 
             studentsQuery = StudentQueryExtensions.Search(studentsQuery, query);
 
-
-            // Expand
             studentsQuery = StudentQueryExtensions.Expand(studentsQuery, query);
 
-            // TOTAL ITEMS
             var totalItems = await studentsQuery.CountAsync();
-            // Sort
+
             studentsQuery = StudentQueryExtensions.Sort(studentsQuery, query);
 
-            // Pading
             studentsQuery = StudentQueryExtensions.Paging(studentsQuery, query);
 
             var students = await studentsQuery.ToListAsync();
 
             var response = StudentMapperExtensions.ToStudentResponseList(students);
 
-            var shapedData = response.SelectFields(query.Fields);
-
-            return new ApiResponse<object>
+            return new ApiResponse<List<StudentResponse>>
             {
                 success = true,
                 message = "Get students successfully",
-                Data = shapedData,
+                Data = response,
                 pagination = new PaginationMetadata
                 {
                     Page = query.Page,
                     PageSize = query.Size,
                     TotalItems = totalItems,
                     TotalPages =
-                            (int)Math.Ceiling(
-                                (double)totalItems
-                                / query.Size)
+                        (int)Math.Ceiling((double)totalItems / query.Size)
                 }
             };
         }
-
         public async Task<StudentResponse?> GetByIdAsync(int id)
         {
             var existingStudents = await _unitOfWork.Students.GetQueryable().Include(x => x.Enrollments).ThenInclude(x => x.Course).FirstOrDefaultAsync(x => x.Studentid == id);
