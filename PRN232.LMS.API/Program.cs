@@ -24,10 +24,12 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "PRN232.LMS API", Version = "v1" });
     options.OperationFilter<LowercaseQueryParameterFilter>();
+    options.OperationFilter<ProducesResponseTypeOperationFilter>();
 });
 
 // Database
 builder.Services.AddDatabase(builder.Configuration);
+// Service
 builder.Services.AddDependencyInjection();
 
 var app = builder.Build();
@@ -42,7 +44,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Middleware
-app.UseHttpsRedirection();
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
