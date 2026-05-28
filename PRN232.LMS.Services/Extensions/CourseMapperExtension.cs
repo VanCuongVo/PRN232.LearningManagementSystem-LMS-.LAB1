@@ -39,22 +39,20 @@ namespace PRN232.LMS.Services.Extensions
             {
                 CourseId = course.Courseid,
                 CourseName = course.Coursename,
-                SemesterId = course.Semester.Semesterid,
-                SemesterName = course.Semester.Semestername,
-                Enrollments = course.Enrollments.Select(x => new EnrollmentInCourseResponse
+                SemesterId = course.Semester?.Semesterid ?? 0,
+                SemesterName = course.Semester?.Semestername ?? string.Empty,
+                Enrollments = course.Enrollments?.Select(x => new EnrollmentInCourseResponse
                 {
                     EnrollmentId = x.Enrollmentid,
                     EnrollDate = x.Enrolldate,
                     Status = x.Status ?? string.Empty
-                    // StudentId = x.Studentid,
-                    // StudentName = x.Student?.Fullname ?? string.Empty
-                }).ToList(),
-                Students = course.Enrollments.Where(x => x.Student != null).Select(x => new StudentInCourseResponse
+                }).ToList() ?? new List<EnrollmentInCourseResponse>(),
+                Students = course.Enrollments?.Where(x => x.Student != null).Select(x => new StudentInCourseResponse
                 {
                     StudentId = x.Student!.Studentid,
                     FullName = x.Student.Fullname,
                     Email = x.Student.Email
-                }).ToList()
+                }).ToList() ?? new List<StudentInCourseResponse>()
             };
         }
 

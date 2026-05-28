@@ -1,13 +1,14 @@
-using System.Net;
+using System.Text;
 using System.Text.Json;
+using System.Xml.Serialization;
 using PRN232.LMS.Models.ResponseModel;
-
 
 namespace PRN232.LMS.API.Middlewares
 {
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
+
         public ExceptionMiddleware(RequestDelegate next)
         {
             _next = next;
@@ -21,23 +22,42 @@ namespace PRN232.LMS.API.Middlewares
             }
             catch (Exception ex)
             {
-                context.Response.ContentType = "application/json";
-
-                context.Response.StatusCode =
-                    (int)HttpStatusCode.BadRequest;
-
                 var response = new ApiResponse<object>
                 {
                     success = false,
-
                     message = "Request failed",
-
-                    Errors = ex.Message
+                    Errors = ex.InnerException?.Message
+                 ?? ex.Message
                 };
 
-                var json = JsonSerializer.Serialize(response);
+                context.Response.StatusCode = 500;
 
-                await context.Response.WriteAsync(json);
+                var accept = context.Request.Headers.Accept.ToString();
+
+                if (accept.Contains("application/xml"))
+                {
+                    context.Response.ContentType = "application/xml";
+
+                    var serializer =
+                        new XmlSerializer(typeof(ApiResponse<object>));
+
+                    using var stringWriter = new StringWriter();
+
+                    serializer.Serialize(stringWriter, response);
+
+                    await context.Response.WriteAsync(
+                        stringWriter.ToString(),
+                        Encoding.UTF8);
+                }
+                else
+                {
+                    context.Response.ContentType =
+                        "application/json";
+
+                    var json = JsonSerializer.Serialize(response);
+
+                    await context.Response.WriteAsync(json);
+                }
             }
         }
     }

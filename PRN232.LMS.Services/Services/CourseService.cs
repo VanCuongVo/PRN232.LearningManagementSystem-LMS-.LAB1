@@ -21,13 +21,13 @@ namespace PRN232.LMS.Services.Services
         {
             var createCourse = new Course
             {
-                Courseid = request.CourseId,
                 Coursename = request.CourseName,
-                Semesterid = request.SemesterId
+                Semesterid = request.SemesterId,
+                Coursecode = request.Coursecode
             };
-
-            var res = await _unitOfWork.Courses.AddAsync(createCourse);
+            var course = await _unitOfWork.Courses.AddAsync(createCourse);
             await _unitOfWork.SaveChangesAsync();
+            var courseFromDb = await _unitOfWork.Courses.GetQueryable().Include(x => x.Semester).FirstOrDefaultAsync(x => x.Courseid == course.Courseid);
 
             return new ApiResponse<CourseResponse>
             {
@@ -35,8 +35,7 @@ namespace PRN232.LMS.Services.Services
 
                 message = "Create course successfully",
 
-                Data = CourseMapperExtension
-                    .ToCourseResponse(res)
+                Data = courseFromDb.ToCourseResponse()
             };
         }
 

@@ -21,7 +21,7 @@ builder.Services.AddValidationConfiguration();
 var app = builder.Build();
 // Middleware
 // DB migrate + seed
-await app.InitialiseDatabaseAsync();
+// await app.InitialiseDatabaseAsync();
 app.UseSwaggerConfiguration();
 app.UseAuthentication();
 app.UseAuthorization();

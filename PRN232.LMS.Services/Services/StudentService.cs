@@ -19,7 +19,7 @@ namespace PRN232.LMS.Services.Services
 
         public async Task<ApiResponse<StudentResponse>> CreateAsync(CreateStudentRequest request)
         {
-            
+
             var createStudentRequest = new Models.Entities.Student
             {
                 Dateofbirth = DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Utc),
