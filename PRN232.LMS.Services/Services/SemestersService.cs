@@ -69,7 +69,7 @@ namespace PRN232.LMS.Services.Services
 
         public async Task<ApiResponse<object>> GetAllAsync(QueryParameters query)
         {
-            var semesterQuery = _uniOfWork.Semesters.GetQueryable().Search(query).Expand(query);
+            var semesterQuery = _uniOfWork.Semesters.GetQueryable().Search(query).Expand(query).Include(s => s.Courses).ThenInclude(c => c.Enrollments).ThenInclude(e => e.Student);
             var totalItems = await semesterQuery.CountAsync();
 
             var semesters = await semesterQuery.Sort(query).Paging(query).ToListAsync();

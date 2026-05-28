@@ -5,7 +5,7 @@ namespace PRN232.LMS.Models.RequestModel
     public class CreateSubjectRequest
     {
         [Required(ErrorMessage = "SubjectCode is required")]
-        [RegularExpression("^[A-Z0-9-]+$", ErrorMessage = "SubjectCode must be uppercase alphanumeric")]
+        [RegularExpression(@"^[A-Z]{3}\d{3}$", ErrorMessage = "SubjectCode must be like PRN232")]
         public string SubjectCode { get; set; } = null!;
 
         [Required(ErrorMessage = "SubjectName is required")]
