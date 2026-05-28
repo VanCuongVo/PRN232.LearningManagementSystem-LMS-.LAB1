@@ -21,7 +21,6 @@ namespace PRN232.LMS.Services.Services
         {
             var createSemestesRequest = new Semester
             {
-                Semesterid = request.SemesterId,
                 Semestername = request.SemesterName,
                 Enddate = DateTime.SpecifyKind(request.EndDate, DateTimeKind.Utc),
                 Startdate = DateTime.SpecifyKind(request.StartDate, DateTimeKind.Utc),
