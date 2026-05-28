@@ -144,21 +144,17 @@ namespace PRN232.LMS.Services.Services
                     message = "Course not found"
                 };
             }
-
             course.Coursename = request.CourseName;
             course.Semesterid = request.SemesterId;
-
+            course.Coursecode = request.Coursecode;
             await _unitOfWork.Courses.UpdateAsync(course);
-
             await _unitOfWork.SaveChangesAsync();
+            var courseFromDb = await _unitOfWork.Courses.GetQueryable().Include(x => x.Semester).FirstOrDefaultAsync(x => x.Courseid == course.Courseid);
             return new ApiResponse<CourseResponse>
             {
                 success = true,
-
                 message = "Update course successfully",
-
-                Data = CourseMapperExtension
-                   .ToCourseResponse(course)
+                Data = courseFromDb.ToCourseResponse()
             };
         }
     }

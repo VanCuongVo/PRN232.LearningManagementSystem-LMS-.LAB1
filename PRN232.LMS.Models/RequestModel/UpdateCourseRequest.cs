@@ -10,5 +10,9 @@ namespace PRN232.LMS.Models.RequestModel
 
         [Range(1, int.MaxValue, ErrorMessage = "SemesterId must be a positive integer")]
         public int SemesterId { get; set; }
+        [Required(ErrorMessage = "CourseCode is required")]
+        [RegularExpression(@"^[A-Z]{3}\d{3}$", ErrorMessage = "CourseCode must be like PRN232")]
+        public string Coursecode { get; set; } = null!;
+
     }
 }
