@@ -1,4 +1,6 @@
 
+using PRN232.LMS.Models.Enum;
+
 namespace PRN232.LMS.Models.ResponseModel
 {
     public class EnrollmentResponse
@@ -7,7 +9,7 @@ namespace PRN232.LMS.Models.ResponseModel
 
         public DateTime EnrollDate { get; set; }
 
-        public string Status { get; set; } = null!;
+        public EnrollmentStatus Status { get; set; }
 
         public StudentInEnrollmentResponse? Student { get; set; }
 

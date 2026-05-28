@@ -3,7 +3,6 @@ using PRN232.LMS.Models.Entities;
 using PRN232.LMS.Models.RequestModel;
 using PRN232.LMS.Models.ResponseModel;
 using PRN232.LMS.Repositories.IRepositories;
-using PRN232.LMS.Repositories.Repositories;
 using PRN232.LMS.Services.Extensions;
 using PRN232.LMS.Services.Interfaces;
 using PRN232.LMS.Services.Utility;
@@ -27,7 +26,6 @@ namespace PRN232.LMS.Services.Services
                 Courseid = request.CourseId,
                 Enrolldate = DateTime.SpecifyKind(request.EnrollDate, DateTimeKind.Utc),
                 Status = request.Status,
-                Enrollmentid = request.EnrollmentId
             };
             await _unitOFWork.Enrollments.AddAsync(enrollment);
             await _unitOFWork.SaveChangesAsync();

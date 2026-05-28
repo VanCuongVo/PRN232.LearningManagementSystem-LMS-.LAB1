@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using PRN232.LMS.Models.Enum;
 
 namespace PRN232.LMS.Models.Entities;
 
@@ -17,7 +18,7 @@ public partial class Enrollment
 
     public DateTime Enrolldate { get; set; }
 
-    public string Status { get; set; } = null!;
+    public EnrollmentStatus Status { get; set; }
 
     public virtual Course Course { get; set; } = null!;
 

@@ -20,7 +20,7 @@ namespace PRN232.LMS.Services.Utility
             return query.Where(x =>
                 x.Student.Fullname.ToLower().Contains(search) ||
                 x.Course.Coursename.ToLower().Contains(search) ||
-                x.Status.ToLower().Contains(search));
+                x.Status.ToString().ToLower().Contains(search));
         }
 
         public static IQueryable<Enrollment> Sort(

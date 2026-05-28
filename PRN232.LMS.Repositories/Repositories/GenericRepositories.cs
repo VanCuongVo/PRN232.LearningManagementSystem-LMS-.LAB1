@@ -9,20 +9,17 @@ namespace PRN232.LMS.Repositories.Repositories
         public readonly LmsdbContext _lmsdbContext;
         protected readonly DbSet<T> _dbSet;
 
-   
+
         public GenericRepositories(LmsdbContext lmsdbContext)
         {
             _lmsdbContext = lmsdbContext;
             _dbSet = _lmsdbContext.Set<T>();
         }
-
-        
-
         public async Task<T> AddAsync(T entity)
         {
             try
             {
-               await _lmsdbContext.Set<T>().AddAsync(entity);
+                await _lmsdbContext.Set<T>().AddAsync(entity);
                 return entity;
 
             }
@@ -53,14 +50,14 @@ namespace PRN232.LMS.Repositories.Repositories
 
         public IQueryable<T> GetQueryable()
         {
-          return _dbSet.AsQueryable();
+            return _dbSet.AsQueryable();
         }
 
         public async Task<T> UpdateAsync(T entity)
         {
             try
             {
-               _lmsdbContext.Set<T>().Update(entity);
+                _lmsdbContext.Set<T>().Update(entity);
                 return entity;
 
             }
@@ -68,6 +65,6 @@ namespace PRN232.LMS.Repositories.Repositories
             {
                 throw new Exception(ex.Message);
             }
-        }     
+        }
     }
 }

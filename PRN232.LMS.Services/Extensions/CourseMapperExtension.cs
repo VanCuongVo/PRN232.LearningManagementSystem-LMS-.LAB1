@@ -45,7 +45,7 @@ namespace PRN232.LMS.Services.Extensions
                 {
                     EnrollmentId = x.Enrollmentid,
                     EnrollDate = x.Enrolldate,
-                    Status = x.Status ?? string.Empty
+                    Status = x.Status
                 }).ToList() ?? new List<EnrollmentInCourseResponse>(),
                 Students = course.Enrollments?.Where(x => x.Student != null).Select(x => new StudentInCourseResponse
                 {

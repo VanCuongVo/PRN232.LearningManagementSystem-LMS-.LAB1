@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using PRN232.LMS.Models.Enum;
 
 namespace PRN232.LMS.Models.RequestModel
 {
@@ -12,8 +13,7 @@ namespace PRN232.LMS.Models.RequestModel
 
         public DateTime EnrollDate { get; set; }
 
-        [Required(ErrorMessage = "Status is required")]
-        [StringLength(50, ErrorMessage = "Status cannot exceed 50 characters")]
-        public string Status { get; set; } = null!;
+        [EnumDataType(typeof(EnrollmentStatus))]
+        public EnrollmentStatus Status { get; set; }
     }
 }

@@ -17,6 +17,7 @@ builder.Services.AddDependencyInjection();
 // Validator
 builder.Services.AddFluentValidationConfig();
 builder.Services.AddValidationConfiguration();
+builder.Services.AddCustomJsonOptions();
 
 var app = builder.Build();
 // Middleware
