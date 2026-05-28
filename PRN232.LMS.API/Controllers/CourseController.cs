@@ -71,12 +71,9 @@ namespace PRN232.LMS.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(
-            int id,
-            [FromBody] UpdateCourseRequest request)
+        public async Task<ActionResult> Update(int id, [FromBody] UpdateCourseRequest request)
         {
-            var result =
-                await _courseService.UpdateAsync(id, request);
+            var result = await _courseService.UpdateAsync(id, request);
 
             if (!result.success)
             {

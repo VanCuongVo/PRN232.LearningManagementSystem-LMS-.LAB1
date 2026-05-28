@@ -45,8 +45,7 @@ namespace PRN232.LMS.API.Controllers
             return Ok(result);
 
         }
-
-
+        
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateStudentRequest request)
         {
@@ -83,10 +82,10 @@ namespace PRN232.LMS.API.Controllers
 
                 if (!result.success)
                 {
-                    return BadRequest(result);
+                    return NotFound(result);
                 }
 
-                return NoContent();
+                return Ok(result);
             }
             catch (ArgumentException ex)
             {

@@ -114,39 +114,28 @@ namespace PRN232.LMS.Services.Services
 
         public async Task<ApiResponse<StudentResponse>> UpdateAsync(int id, UpdateStudentRequest request)
         {
-
-
-            var student =
-                  await _unitOfWork
-                      .Students
-                      .GetByIdAsync(id);
+            var student = await _unitOfWork.Students.GetByIdAsync(id);
             if (student == null)
             {
                 return new ApiResponse<StudentResponse>
                 {
                     success = false,
-
-                    message =
-                "Student not found"
+                    message = "Student not found"
                 };
             }
             student.Email = request.Email;
             student.Dateofbirth = DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Utc);
             student.Fullname = request.FullName;
-
+            student.Age = request.Age;
+            student.Phonenumber = request.Phonenumber;
+            student.Studentcode = request.Studentcode;
             await _unitOfWork.Students.UpdateAsync(student);
             await _unitOfWork.SaveChangesAsync();
-
-            return new ApiResponse<
-        StudentResponse>
+            return new ApiResponse<StudentResponse>
             {
                 success = true,
-
-                message =
-            "Update student successfully",
-
-                Data =
-            student.ToStudentResponse()
+                message = "Update student successfully",
+                Data = student.ToStudentResponse()
             };
         }
     }
