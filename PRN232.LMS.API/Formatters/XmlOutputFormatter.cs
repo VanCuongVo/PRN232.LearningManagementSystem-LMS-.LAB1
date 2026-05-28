@@ -6,8 +6,7 @@ using Microsoft.Net.Http.Headers;
 
 namespace PRN232.LMS.API.Formatters
 {
-    public class XmlOutputFormatter
-        : TextOutputFormatter
+    public class XmlOutputFormatter : TextOutputFormatter
     {
         public XmlOutputFormatter()
         {
@@ -232,7 +231,6 @@ namespace PRN232.LMS.API.Formatters
 
                 return;
             }
-
             // =========================
             // Complex Object
             // =========================

@@ -76,9 +76,7 @@ namespace PRN232.LMS.API.Controllers
             [FromBody] UpdateCourseRequest request)
         {
             var result =
-                await _courseService.UpdateAsync(
-                    id,
-                    request);
+                await _courseService.UpdateAsync(id, request);
 
             if (!result.success)
             {
