@@ -5,7 +5,6 @@ using PRN232.LMS.Repositories.IRepositories;
 using PRN232.LMS.Services.Extensions;
 using PRN232.LMS.Services.IServices;
 using PRN232.LMS.Services.Utility;
-using PRN232.LMS.Services.Validators;
 
 namespace PRN232.LMS.Services.Services
 {
@@ -20,13 +19,15 @@ namespace PRN232.LMS.Services.Services
 
         public async Task<ApiResponse<StudentResponse>> CreateAsync(CreateStudentRequest request)
         {
-            StudentValidator.ValidateStudentRequest(request);
-
+            
             var createStudentRequest = new Models.Entities.Student
             {
                 Dateofbirth = DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Utc),
                 Email = request.Email,
-                Fullname = request.FullName
+                Fullname = request.FullName,
+                Age = request.Age,
+                Phonenumber = request.Phonenumber,
+                Studentcode = request.Studentcode
 
             };
             var res = await _unitOfWork.Students.AddAsync(createStudentRequest);
@@ -113,7 +114,7 @@ namespace PRN232.LMS.Services.Services
 
         public async Task<ApiResponse<StudentResponse>> UpdateAsync(int id, UpdateStudentRequest request)
         {
-            StudentValidator.ValidateStudentRequest(request);
+
 
             var student =
                   await _unitOfWork

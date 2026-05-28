@@ -6,9 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
- 
+
   <ItemGroup>
     <ProjectReference Include="..\PRN232.LMS.Models\PRN232.LMS.Models.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0"></PackageReference>
   </ItemGroup>
-
 </Project>

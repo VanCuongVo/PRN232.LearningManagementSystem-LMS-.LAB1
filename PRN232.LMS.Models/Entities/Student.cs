@@ -14,4 +14,8 @@ public partial class Student
     public DateTime Dateofbirth { get; set; }
 
     public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
+
+    public string Studentcode { get; set; } = null!;
+    public int Age { get; set; }
+    public string Phonenumber { get; set; } = null!;
 }

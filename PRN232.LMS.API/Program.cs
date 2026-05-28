@@ -16,6 +16,7 @@ builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddDependencyInjection();
 // Validator
 builder.Services.AddFluentValidationConfig();
+builder.Services.AddValidationConfiguration();
 
 var app = builder.Build();
 // Middleware
@@ -24,5 +25,6 @@ await app.InitialiseDatabaseAsync();
 app.UseSwaggerConfiguration();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseGlobalException();
 app.MapControllers();
 app.Run();

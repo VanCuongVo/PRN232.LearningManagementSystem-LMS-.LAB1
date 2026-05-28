@@ -11,34 +11,29 @@ namespace PRN232.LMS.Services.Extensions
             return new StudentResponse
             {
                 StudentId = student.Studentid,
-
                 FullName = student.Fullname,
-
                 Email = student.Email,
-
+                Age = student.Age,
+                PhoneNumber = student.Phonenumber,
+                StudentCode = student.Studentcode,
                 DateOfBirth = student.Dateofbirth,
                 Enrollments = student.Enrollments.Select(x => new EnrollmentResponse
                 {
                     EnrollmentId = x.Enrollmentid,
                     Status = x.Status,
                     EnrollDate = x.Enrolldate,
-                    // CourseId = x.Course.Courseid,
-                    // CourseName = x.Course.Coursename,
-                    // StudentId = x.Student.Studentid,
-                    // StudentName = x.Student.Fullname,
-                    // StudentEmail = x.Student.Email
                     Student = new StudentInEnrollmentResponse
                     {
                         StudentId = x.Student.Studentid,
-
                         FullName = x.Student.Fullname,
-
-                        Email = x.Student.Email
+                        Email = x.Student.Email,
+                        PhoneNumber = student.Phonenumber,
+                        StudentCode = student.Studentcode,
+                        Age = student.Age
                     },
                     Course = new CourseInEnrollmentResponse
                     {
                         CourseId = x.Course.Courseid,
-
                         CourseName = x.Course.Coursename
                     }
                 }).ToList()
